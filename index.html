@@ -167,6 +167,20 @@ nav.scrolled {
   );
   mix-blend-mode: overlay;
 }
+.hero-video-loader {
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--coral); opacity: 0;
+  transition: opacity 0.6s;
+  animation: videoLoaderPulse 1.2s ease-in-out infinite;
+  z-index: 3;
+}
+.hero-video-loader.active { opacity: 0.6; }
+@keyframes videoLoaderPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.4; }
+  50% { transform: translateX(-50%) scale(1.8); opacity: 0.9; }
+}
+.hero-video-bg video.loaded { opacity: 1; transition: opacity 1s; }
 [data-theme="dark"] .hero-video-overlay {
   background: linear-gradient(
     135deg,
@@ -566,10 +580,11 @@ footer .footer-logo svg { width: 20px; height: 20px; }
 <section class="hero" id="hero">
   <!-- Video Background -->
   <div class="hero-video-bg">
-    <video autoplay muted loop playsinline preload="auto" poster="assets/logo-hero.png">
+    <video id="heroVideo" muted loop playsinline preload="none" poster="assets/logo-hero.png">
       <source src="assets/designa_brand_video_20260521.mp4" type="video/mp4">
     </video>
     <div class="hero-video-overlay"></div>
+    <div class="hero-video-loader" id="videoLoader"></div>
   </div>
 
   <div class="hero-logo">
@@ -864,6 +879,29 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   });
 });
+
+/* ─── Video Lazy Load ─── */
+const heroVideo = document.getElementById('heroVideo');
+const videoLoader = document.getElementById('videoLoader');
+
+function loadVideo() {
+  if (!heroVideo || heroVideo.dataset.loaded) return;
+  heroVideo.dataset.loaded = '1';
+  videoLoader.classList.add('active');
+  heroVideo.setAttribute('preload', 'auto');
+  heroVideo.load();
+  heroVideo.addEventListener('loadeddata', () => {
+    videoLoader.classList.remove('active');
+    heroVideo.classList.add('loaded');
+    heroVideo.play().catch(() => {});
+  }, { once: true });
+}
+
+if (document.readyState === 'complete') {
+  setTimeout(loadVideo, 200);
+} else {
+  window.addEventListener('load', () => setTimeout(loadVideo, 200));
+}
 
 /* ─── Particle Canvas (Molecular Network) ─── */
 const particleCanvas = document.getElementById('particle-canvas');
