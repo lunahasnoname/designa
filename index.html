@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="DesigNA — 无论碳基还是硅基，都为您将设计注入DNA。Whether you breathe oxygen or run on silicon, we inject design into your DNA.">
+<title>DesigNA — Design Injected into DNA · 设计注入基因</title>
+<link rel="icon" type="image/png" href="assets/logo-icon-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   DesigNA Design System
+   Colors:
+   - Living Coral    #FF6F61  PANTONE 16-1546
+   - Process Cyan    #00AEEF  PANTONE Process Cyan C
+   - Violet C        #440099  PANTONE Violet C
+   Typography:
+   - Display: Plus Jakarta Sans 700-800
+   - Body EN: Inter 300-500
+   - Body ZH: Inter + system sans fallback
+   ═══════════════════════════════════════ */
+
+:root {
+  --coral: #FF6F61;
+  --coral-glow: rgba(255,111,97,0.18);
+  --cyan: #00AEEF;
+  --cyan-glow: rgba(0,174,239,0.18);
+  --violet: #440099;
+  --violet-glow: rgba(68,0,153,0.15);
+  --violet-light: #6B2FB5;
+
+  --bg: #F8F6F3;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F0EEEC;
+  --text: #1A1A2E;
+  --text-secondary: #5A5872;
+  --text-muted: #8A8898;
+  --border: rgba(0,0,0,0.06);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.06);
+  --shadow-lg: 0 16px 64px rgba(0,0,0,0.08);
+
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] {
+  --bg: #0A0A12;
+  --bg-surface: #12121E;
+  --bg-elevated: #1A1A2E;
+  --text: #E8E6F0;
+  --text-secondary: #A8A6B8;
+  --text-muted: #6E6C80;
+  --border: rgba(255,255,255,0.06);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.3);
+  --shadow-lg: 0 16px 64px rgba(0,0,0,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.6s var(--ease-out-expo), color 0.6s var(--ease-out-expo);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--coral); border-radius: 3px; }
+
+::selection { background: var(--coral); color: white; }
+
+/* ─── Navigation ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 48px;
+  background: rgba(248,246,243,0.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.4s var(--ease-out-expo);
+}
+nav.scrolled {
+  background: var(--bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  padding: 12px 48px; border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="dark"] nav {
+  background: rgba(10,10,18,0.85);
+}
+[data-theme="dark"] nav.scrolled {
+  background: var(--bg);
+}
+.nav-logo {
+  display: flex; align-items: center;
+  text-decoration: none; transition: opacity 0.3s;
+}
+.nav-logo:hover { opacity: 0.85; }
+.logo-img-nav { height: 28px; width: auto; }
+
+.nav-links {
+  display: flex; align-items: center; gap: 36px; list-style: none;
+}
+.nav-links a {
+  text-decoration: none; color: var(--text-secondary);
+  font-size: 13px; font-weight: 600; letter-spacing: 0.8px;
+  text-transform: uppercase; transition: color 0.3s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -6px; left: 0;
+  width: 0; height: 2px; background: var(--coral); border-radius: 1px;
+  transition: width 0.3s var(--ease-out-expo);
+}
+.nav-links a:hover { color: var(--coral); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-actions { display: flex; align-items: center; gap: 16px; }
+.nav-btn {
+  background: none; border: none; cursor: pointer;
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--text-secondary);
+  transition: all 0.3s var(--ease-out-expo);
+}
+.nav-btn:hover { color: var(--coral); background: var(--coral-glow); }
+.nav-btn.lang {
+  font-family: var(--font-display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.5px; width: auto; padding: 0 12px;
+  border-radius: 20px; border: 1.5px solid var(--border);
+}
+
+/* ─── Hero ─── */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  padding: 120px 48px 80px; position: relative; overflow: hidden;
+  background: var(--bg);
+}
+
+.hero-video-bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; overflow: hidden; pointer-events: none;
+}
+.hero-video-bg video {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(0.6) contrast(0.9) saturate(0.8);
+  transform: scale(1.05);
+}
+.hero-video-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255,111,97,0.15) 0%,
+    rgba(0,174,239,0.1) 50%,
+    rgba(68,0,153,0.15) 100%
+  );
+  mix-blend-mode: overlay;
+}
+[data-theme="dark"] .hero-video-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(255,111,97,0.25) 0%,
+    rgba(0,174,239,0.2) 50%,
+    rgba(68,0,153,0.25) 100%
+  );
+}
+
+.hero-bg { display: none; }
+
+.hero-logo {
+  margin-bottom: 20px; position: relative; z-index: 2;
+  animation: logoReveal 1.8s var(--ease-out-expo) both;
+}
+.logo-img-hero { max-width: 500px; width: 100%; height: auto; display: block; filter: drop-shadow(0 0 30px rgba(255,111,97,0.25)) drop-shadow(0 0 60px rgba(255,111,97,0.1)); }
+.hero-logo .logo-glow {
+  position: absolute; inset: -60px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,111,97,0.18) 0%, rgba(255,111,97,0.06) 40%, transparent 70%);
+  animation: logoGlowPulse 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+.hero-logo .logo-glow-outer {
+  position: absolute; inset: -120px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,174,239,0.08) 0%, transparent 60%);
+  animation: logoGlowOuter 7s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -2;
+}
+@keyframes logoReveal {
+  0% { opacity: 0; transform: scale(0.92) translateY(12px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes logoGlowPulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.97); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+@keyframes logoGlowOuter {
+  0%, 100% { opacity: 0.4; transform: scale(0.95) rotate(0deg); }
+  50% { opacity: 0.8; transform: scale(1.08) rotate(2deg); }
+}
+
+.hero-tagline {
+  font-size: clamp(17px, 2.2vw, 24px); font-weight: 300; max-width: 680px;
+  margin: 32px auto; line-height: 1.8; color: var(--coral);
+  position: relative; z-index: 2;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+
+  /* Apple Glass Effect */
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 24px 36px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+[data-theme="dark"] .hero-tagline {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.hero-actions {
+  display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  margin-top: 48px; position: relative; z-index: 2;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px; border-radius: 50px; text-decoration: none;
+  font-family: var(--font-body); font-size: 16px; font-weight: 500;
+  transition: all 0.4s var(--ease-spring); cursor: pointer; border: none;
+  position: relative; overflow: hidden;
+}
+.btn-primary {
+  background: var(--coral); color: white;
+  box-shadow: 0 4px 20px rgba(255,111,97,0.3);
+}
+.btn-primary::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 200%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  transition: left 0.6s var(--ease-out-expo);
+}
+.btn-primary:hover::before { left: 100%; }
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(255,111,97,0.4);
+}
+.btn-secondary {
+  background: transparent; color: var(--cyan); border: 1.5px solid var(--cyan);
+  opacity: 0.85;
+  animation: violetGlow 3s ease-in-out infinite;
+}
+.btn-secondary:hover {
+  opacity: 1; border-color: var(--violet); color: white;
+  background: var(--violet);
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(68,0,153,0.5);
+}
+
+.hero-scroll {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 3px;
+  color: var(--text-muted); z-index: 2;
+}
+.scroll-line {
+  width: 1px; height: 40px; background: linear-gradient(to bottom, var(--coral), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%, 100% { height: 20px; opacity: 0.3; }
+  50% { height: 40px; opacity: 0.8; }
+}
+@keyframes violetGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(68,0,153,0.4), 0 0 20px rgba(68,0,153,0.2); }
+  50% { box-shadow: 0 0 16px rgba(68,0,153,0.7), 0 0 40px rgba(68,0,153,0.4), 0 0 60px rgba(68,0,153,0.2); }
+}
+
+/* ─── Sections ─── */
+section { padding: 120px 48px; max-width: 1280px; margin: 0 auto; position: relative; }
+.section-header { margin-bottom: 64px; }
+.section-index {
+  font-family: var(--font-display); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 4px; color: var(--coral);
+  margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+}
+.section-index::before {
+  content: ''; display: block; width: 24px; height: 2px;
+  background: var(--coral); border-radius: 1px;
+  opacity: 0.6;
+}
+.section-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(32px, 5vw, 56px); line-height: 1.15;
+  margin-bottom: 12px; letter-spacing: -1px;
+}
+.section-title .zh { display: block; font-size: 0.5em; opacity: 0.45; font-weight: 400; margin-top: 6px; letter-spacing: 0; }
+.section-desc { font-size: 17px; color: var(--text-secondary); max-width: 560px; line-height: 1.7; }
+
+.divider {
+  width: 100%; height: 1px; max-width: 1280px; margin: 0 auto;
+  background: linear-gradient(90deg, transparent, var(--coral), var(--violet), var(--cyan), transparent);
+  opacity: 0.12; border: none;
+}
+[data-theme="dark"] .divider { opacity: 0.2; }
+
+/* ─── Philosophy ─── */
+.phil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.phil-main h3 {
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 3vw, 32px);
+  margin-bottom: 20px; line-height: 1.3;
+}
+.phil-main p { color: var(--text-secondary); line-height: 1.9; font-size: 16px; }
+
+.phil-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.phil-card {
+  background: var(--bg-surface); border-radius: 24px; padding: 36px;
+  border: 1px solid var(--border); transition: all 0.4s var(--ease-out-expo);
+  position: relative; overflow: hidden;
+}
+.phil-card::after {
+  content: ''; position: absolute; inset: 0; border-radius: 24px;
+  background: radial-gradient(circle at 50% 0%, rgba(255,111,97,0.06) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.4s;
+  pointer-events: none;
+}
+.phil-card:nth-child(2)::after { background: radial-gradient(circle at 50% 0%, rgba(0,174,239,0.06) 0%, transparent 70%); }
+.phil-card:nth-child(3)::after { background: radial-gradient(circle at 50% 0%, rgba(68,0,153,0.06) 0%, transparent 70%); }
+.phil-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--coral); border-radius: 0 0 2px 2px; opacity: 0;
+  transition: opacity 0.4s;
+}
+.phil-card:nth-child(2)::before { background: var(--cyan); }
+.phil-card:nth-child(3)::before { background: var(--violet); }
+.phil-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.phil-card:hover::before { opacity: 1; }
+.phil-card:hover::after { opacity: 1; }
+.phil-card:nth-child(2) { margin-top: 40px; }
+.phil-card:nth-child(3) { margin-top: -40px; }
+.phil-card-icon {
+  width: 48px; height: 48px; border-radius: 14px; display: flex;
+  align-items: center; justify-content: center; margin-bottom: 16px;
+  font-size: 20px;
+}
+.phil-card-icon.empathy { background: rgba(255,111,97,0.1); color: var(--coral); }
+.phil-card-icon.logic { background: rgba(0,174,239,0.1); color: var(--cyan); }
+.phil-card-icon.dna { background: rgba(68,0,153,0.1); color: var(--violet); }
+.phil-card h4 { font-family: var(--font-display); font-weight: 700; font-size: 18px; margin-bottom: 6px; }
+.phil-card h4 .zh { display: block; font-size: 0.75em; opacity: 0.5; font-weight: 400; }
+.phil-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+/* ─── Design System ─── */
+.system-section { background: var(--bg-surface); max-width: none; padding: 120px 0; }
+.system-section .section-header,
+.system-section .section-desc,
+.system-section .system-content { max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: 48px; padding-right: 48px; }
+
+.system-subtitle {
+  font-family: var(--font-display); font-weight: 600; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 3px; opacity: 0.4;
+  margin: 72px 0 24px;
+}
+.system-subtitle:first-of-type { margin-top: 0; }
+
+.color-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
+.color-card {
+  border-radius: 24px; padding: 48px 36px; position: relative; overflow: hidden;
+  transition: all 0.4s var(--ease-spring); cursor: pointer; color: white;
+}
+.color-card:hover { transform: scale(1.03); box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+.color-card.coral { background: linear-gradient(135deg, #FF6F61 0%, #FF8A7E 100%); }
+.color-card.cyan { background: linear-gradient(135deg, #00AEEF 0%, #33C4FF 100%); }
+.color-card.violet { background: linear-gradient(135deg, #440099 0%, #6B2FB5 100%); }
+.color-card .color-hex { font-family: var(--font-display); font-weight: 800; font-size: 32px; margin-bottom: 6px; letter-spacing: -1px; }
+.color-card .color-name { font-size: 16px; opacity: 0.9; margin-bottom: 4px; }
+.color-card .color-pantone { font-size: 12px; opacity: 0.55; text-transform: uppercase; letter-spacing: 1px; }
+.color-card .color-meaning {
+  position: absolute; bottom: 28px; right: 36px;
+  font-size: 12px; opacity: 0.65; text-align: right;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  line-height: 1.6;
+}
+
+.logo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.logo-var {
+  background: var(--bg-elevated); border-radius: 24px; padding: 48px;
+  text-align: center; display: flex; flex-direction: column; align-items: center;
+  gap: 24px; border: 1px solid var(--border);
+  transition: all 0.4s var(--ease-out-expo);
+}
+.logo-var:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--coral); }
+.logo-var.dark:hover { border-color: rgba(255,255,255,0.15); }
+.logo-var.dark { background: #0A0A12; border-color: rgba(255,255,255,0.05); }
+.logo-var .var-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px;
+  color: var(--text-muted);
+}
+.logo-var.dark .var-label { color: rgba(255,255,255,0.4); }
+.logo-var svg.logo-full { width: 220px; height: 55px; }
+.logo-var svg.logo-icon-only { width: 80px; height: 80px; }
+
+.typo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.typo-sample {
+  background: var(--bg-elevated); border-radius: 24px; padding: 48px;
+  border: 1px solid var(--border);
+}
+.typo-sample .typo-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 3px;
+  opacity: 0.35; margin-bottom: 28px; font-weight: 600;
+}
+.typo-display { font-family: var(--font-display); font-weight: 800; font-size: 44px; line-height: 1.1; letter-spacing: -1px; }
+.typo-body { font-family: var(--font-body); font-size: 17px; line-height: 1.8; color: var(--text-secondary); }
+
+/* ─── Applications ─── */
+.app-showcase { max-width: 1000px; margin: 0 auto; }
+.app-showcase-img { width: 100%; height: auto; border-radius: 16px; }
+
+/* ─── Contact ─── */
+.contact-section { text-align: center; padding: 140px 48px; max-width: 680px; }
+.contact-section h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(28px, 5vw, 48px); margin-bottom: 16px; letter-spacing: -1px;
+}
+.contact-section h2 .zh { display: block; font-size: 0.5em; opacity: 0.45; font-weight: 400; margin-top: 6px; letter-spacing: 0; }
+.contact-section > p { color: var(--text-secondary); margin-bottom: 40px; line-height: 1.8; font-size: 17px; }
+
+.cta-linkedin {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 18px 44px; background: linear-gradient(135deg, #0077B5, #005582);
+  color: white; text-decoration: none; border-radius: 50px;
+  font-family: var(--font-display); font-weight: 600; font-size: 18px;
+  transition: all 0.4s var(--ease-spring);
+  box-shadow: 0 4px 20px rgba(0,119,181,0.3);
+  position: relative; overflow: hidden;
+}
+.cta-linkedin::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 200%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  transition: left 0.6s var(--ease-out-expo);
+}
+.cta-linkedin:hover::before { left: 100%; }
+.cta-linkedin:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0,119,181,0.4);
+}
+.cta-linkedin svg { width: 22px; height: 22px; fill: white; }
+.cta-linkedin .cta-sub { font-weight: 400; opacity: 0.7; font-size: 14px; }
+
+/* ─── Footer ─── */
+footer {
+  padding: 48px; text-align: center; font-size: 13px;
+  color: var(--text-muted); border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 1280px; margin: 0 auto;
+  position: relative;
+}
+footer::before {
+  content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--coral) 30%, var(--violet) 70%, transparent 100%);
+  opacity: 0.3;
+}
+footer .footer-logo { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 700; color: var(--coral); font-size: 15px; }
+footer .footer-logo svg { width: 20px; height: 20px; }
+
+/* ─── Animations ─── */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── Particle Canvas ─── */
+#particle-canvas {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0; opacity: 0.25;
+}
+[data-theme="dark"] #particle-canvas { opacity: 0.4; }
+.hero, section, .system-section, footer { position: relative; z-index: 1; }
+
+/* ─── Bilingual ─── */
+[data-lang="zh"] .en { display: none !important; }
+[data-lang="en"] .zh { display: none !important; }
+[data-lang="both"] .en,
+[data-lang="both"] .zh { display: revert; }
+[data-lang="both"] .nav-links a .zh { margin-left: 0; }
+[data-lang="both"] .nav-links a .en:after { content: '·'; margin: 0 4px; opacity: 0.3; }
+
+[data-lang="zh"] .lang-en { display: none !important; }
+[data-lang="en"] .lang-zh { display: none !important; }
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .phil-grid { grid-template-columns: 1fr; gap: 48px; }
+  .phil-cards { max-width: 500px; margin: 0 auto; }
+  .phil-card:nth-child(2),
+  .phil-card:nth-child(3) { margin-top: 0; }
+  .logo-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  section { padding: 80px 24px; }
+  .hero { padding: 100px 24px 60px; min-height: 100vh; }
+  .system-section { padding: 80px 0; }
+  .system-section .section-header,
+  .system-section .section-desc,
+  .system-section .system-content { padding-left: 24px; padding-right: 24px; }
+  nav { padding: 16px 24px; }
+  nav.scrolled { padding: 12px 24px; }
+  .nav-links { gap: 16px; }
+  .nav-links a { font-size: 10px; letter-spacing: 0.5px; }
+  .color-grid { grid-template-columns: 1fr; }
+  .typo-grid { grid-template-columns: 1fr; }
+  .phil-cards { grid-template-columns: 1fr; }
+  .hero-text-logo .desig { font-size: clamp(48px, 16vw, 72px); }
+  .hero-text-logo .molecule-a { width: clamp(28px, 8vw, 40px); height: clamp(28px, 8vw, 40px); }
+  footer { flex-direction: column; gap: 16px; padding: 32px 24px; }
+}
+@media (max-width: 480px) {
+  .hero-actions { flex-direction: column; width: 100%; }
+  .btn { width: 100%; justify-content: center; }
+}
+
+/* ─── Prefers reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  #particle-canvas { display: none; }
+}
+</style>
+</head>
+<body data-lang="both" data-theme="light">
+
+<!-- Particle Canvas -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- ═══════════════════ Navigation ═══════════════════ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <img src="assets/logo-nav.png" alt="DesigNA" class="logo-img-nav" width="170" height="58">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#philosophy"><span class="en">Philosophy</span><span class="zh">理念</span></a></li>
+    <li><a href="#system"><span class="en">System</span><span class="zh">体系</span></a></li>
+    <li><a href="#applications"><span class="en">Works</span><span class="zh">应用</span></a></li>
+    <li><a href="#contact"><span class="en">Connect</span><span class="zh">联系</span></a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-btn lang" id="langToggle" title="Toggle Language / 切换语言">EN</button>
+    <button class="nav-btn" id="themeToggle" title="Toggle Theme / 切换主题">🌙</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════ Hero ═══════════════════ -->
+<section class="hero" id="hero">
+  <!-- Video Background -->
+  <div class="hero-video-bg">
+    <video autoplay muted loop playsinline preload="auto" poster="assets/logo-hero.png">
+      <source src="assets/designa_brand_video_20260521.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+  </div>
+
+  <div class="hero-logo">
+    <div class="logo-glow"></div>
+    <div class="logo-glow-outer"></div>
+    <img src="assets/logo-hero.png" alt="DesigNA — Design Injected into DNA" class="logo-img-hero" width="500" height="170">
+  </div>
+
+  <div class="hero-tagline">
+    <div class="en">Whether you breathe oxygen or run on silicon,<br><strong>we inject design into your DNA.</strong></div>
+    <div class="zh">无论碳基还是硅基，<strong>都为您将设计注入DNA。</strong></div>
+  </div>
+
+  <div class="hero-actions">
+    <a href="#system" class="btn btn-primary">
+      <span class="en">View Design System</span>
+      <span class="zh">查看设计体系</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#contact" class="btn btn-secondary">
+      <span class="en">Start a Project</span>
+      <span class="zh">开始项目</span>
+    </a>
+  </div>
+
+  <div class="hero-scroll">
+    <span class="en">Scroll</span>
+    <span class="zh">向下滚动</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════ Philosophy ═══════════════════ -->
+<section id="philosophy">
+  <div class="section-header reveal">
+    <div class="section-index"><span class="en">01 · Philosophy</span><span class="zh">01 · 理念</span></div>
+    <h2 class="section-title">
+      <span class="en">Design Is the Breath<br>Between Worlds</span>
+      <span class="zh">设计是万物<br>之间的呼吸</span>
+    </h2>
+    <p class="section-desc">
+      <span class="en">Between human warmth and machine precision, design is the thread that binds. We create, and we translate.</span>
+      <span class="zh">在人类温暖与机器精准之间，设计是那根联结的线。我们创造，也翻译。</span>
+    </p>
+  </div>
+
+  <div class="phil-grid">
+    <div class="phil-main reveal">
+      <h3>
+        <span class="en">The Triple Helix<br>of Design</span>
+        <span class="zh">设计的三重<br>螺旋</span>
+      </h3>
+      <p>
+        <span class="en">Great design is intuition working with rigor. A system that breathes, evolves, and remembers its first heartbeat.</span>
+        <span class="zh">卓越设计是直觉与严谨的协作。一个呼吸着、进化着、记得最初心跳的系统。</span>
+      </p>
+    </div>
+    <div class="phil-cards">
+      <div class="phil-card reveal">
+        <div class="phil-card-icon empathy">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/></svg>
+        </div>
+        <h4>Empathy <span class="zh">共情</span></h4>
+        <p><span class="en">To design is to listen to the unspoken. We hear the silence between data points. Great design resonates.</span><span class="zh">设计即是倾听未言之意。我们听见数据点之间的寂静。卓越设计引人共鸣。</span></p>
+      </div>
+      <div class="phil-card reveal">
+        <div class="phil-card-icon logic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/></svg>
+        </div>
+        <h4>Logic <span class="zh">逻辑</span></h4>
+        <p><span class="en">Beauty without structure is chaos. We engineer elegance that scales from 4px to 4K without losing its soul.</span><span class="zh">无结构的美是混沌。我们工程化优雅，从 4px 到 4K 扩展而不失灵魂。</span></p>
+      </div>
+      <div class="phil-card reveal">
+        <div class="phil-card-icon dna">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <h4>Essence <span class="zh">本质</span></h4>
+        <p><span class="en">Every brand carries genetic memory. We remember your identity, amplify it, and weave it into every pixel.</span><span class="zh">每个品牌都携带基因记忆。我们记起您的身份，放大它，编织进每一像素。</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════ Design System ═══════════════════ -->
+<section class="system-section" id="system">
+  <div class="section-header reveal">
+    <div class="section-index"><span class="en">02 · Design System</span><span class="zh">02 · 设计体系</span></div>
+    <h2 class="section-title">
+      <span class="en">The Source Code<br>of Beauty</span>
+      <span class="zh">美的<br>源代码</span>
+    </h2>
+    <p class="section-desc">
+      <span class="en">Three colors. One origin. A visual language built for precision and voiced with soul. Clear in any medium, felt by any audience.</span>
+      <span class="zh">三色。一源。一种为精准构建、以灵魂表达的语言。在任何介质中都清晰可见，被任何观众所感知。</span>
+    </p>
+  </div>
+
+  <div class="system-content">
+    <!-- Colors -->
+    <h3 class="system-subtitle reveal"><span class="en">The Palette of Consciousness</span><span class="zh">意识的调色板</span></h3>
+    <div class="color-grid">
+      <div class="color-card coral reveal">
+        <div class="color-hex">#FF6F61</div>
+        <div class="color-name">Living Coral</div>
+        <div class="color-pantone">PANTONE 16-1546</div>
+        <div class="color-meaning"><span class="en">The Pulse<br>of Life</span><span class="zh">生命的<br>脉搏</span></div>
+      </div>
+      <div class="color-card cyan reveal">
+        <div class="color-hex">#00AEEF</div>
+        <div class="color-name">Process Cyan</div>
+        <div class="color-pantone">PANTONE Process Cyan C</div>
+        <div class="color-meaning"><span class="en">The Clarity<br>of Thought</span><span class="zh">思维的<br>澄明</span></div>
+      </div>
+      <div class="color-card violet reveal">
+        <div class="color-hex">#440099</div>
+        <div class="color-name">Violet C</div>
+        <div class="color-pantone">PANTONE Violet C</div>
+        <div class="color-meaning"><span class="en">The Depth<br>of Dream</span><span class="zh">梦的<br>深度</span></div>
+      </div>
+    </div>
+
+    <!-- Logo Variants -->
+    <h3 class="system-subtitle reveal"><span class="en">The Mark of Identity</span><span class="zh">身份之印记</span></h3>
+    <div class="logo-grid">
+      <!-- Full Color -->
+      <div class="logo-var reveal">
+        <span class="var-label"><span class="en">Full Color</span><span class="zh">全彩</span></span>
+        <img src="assets/logo-variant.png" alt="DesigNA Full Color" width="340" height="116" style="width:100%;height:auto;">
+        <span class="var-label" style="font-size:10px;letter-spacing:1px;">Standard · 标准</span>
+      </div>
+
+      <!-- Solid Black -->
+      <div class="logo-var reveal">
+        <span class="var-label"><span class="en">Monochrome</span><span class="zh">单色</span></span>
+        <img src="assets/logo-black.png" alt="DesigNA Black" width="340" height="116" style="width:100%;height:auto;">
+        <span class="var-label" style="font-size:10px;letter-spacing:1px;">B&W · 黑白</span>
+      </div>
+
+      <!-- Reversed -->
+      <div class="logo-var dark reveal">
+        <span class="var-label"><span class="en">Reversed</span><span class="zh">反白</span></span>
+        <img src="assets/logo-reversed-variant.png" alt="DesigNA Reversed" width="340" height="116" style="width:100%;height:auto;">
+        <span class="var-label" style="font-size:10px;letter-spacing:1px;">Dark Mode · 暗色模式</span>
+      </div>
+    </div>
+
+    <!-- Typography -->
+    <h3 class="system-subtitle reveal"><span class="en">The Voice of Form</span><span class="zh">形态之声</span></h3>
+    <div class="typo-grid">
+      <div class="typo-sample reveal">
+        <div class="typo-label">Display · Plus Jakarta Sans</div>
+        <div class="typo-display">Design is<br>DNA.</div>
+        <div style="font-size:28px;font-weight:600;font-family:var(--font-display);opacity:0.45;margin-top:16px;">设计即DNA</div>
+      </div>
+      <div class="typo-sample reveal">
+        <div class="typo-label">Body · Inter + System</div>
+        <div class="typo-body">
+          <span class="en">Good typography works without announcing itself. It feels right at every size, quiet when it should be and bold when it counts.</span>
+          <span class="zh">好的字体设计无需宣告自己。它在每种尺码中都感觉合适，该安静时安静，该有力时有力。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════ Applications ═══════════════════ -->
+<section id="applications">
+  <div class="section-header reveal">
+    <div class="section-index"><span class="en">03 · Applications</span><span class="zh">03 · 品牌应用</span></div>
+    <h2 class="section-title">
+      <span class="en">Where DNA Becomes<br>Flesh</span>
+      <span class="zh">基因在此成为<br>血肉</span>
+    </h2>
+    <p class="section-desc">
+      <span class="en">Business card or billboard, our design DNA adapts without dilution. Every touchpoint is unmistakably DesigNA.</span>
+      <span class="zh">名片也好，广告牌也罢，我们的设计基因适配而无损。每一个触点，毫无疑问是 DesigNA。</span>
+    </p>
+  </div>
+
+  <div class="app-showcase reveal">
+    <img src="assets/brand-applications.png" alt="DesigNA Brand Applications" class="app-showcase-img">
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════ Contact / CTA ═══════════════════ -->
+<section id="contact" class="contact-section">
+  <div class="section-header reveal">
+    <div class="section-index"><span class="en">04 · Connect</span><span class="zh">04 · 连接</span></div>
+    <h2>
+      <span class="en">Shall We Weave Your Story<br>Into the Fabric of Forever?</span>
+      <span class="zh">愿我们将您的故事<br>编织进永恒的肌理？</span>
+    </h2>
+    <p>
+      <span class="en">From first idea to lasting impact, let's build something worth remembering. The conversation starts here.</span>
+      <span class="zh">从最初的想法到深远的影响，让我们一起构建值得铭记的东西。对话从此开始。</span>
+    </p>
+  </div>
+
+  <a href="https://www.linkedin.com/in/lunayzhao/" target="_blank" rel="noopener" class="cta-linkedin reveal">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+    <span class="en">Let's Talk on LinkedIn</span>
+    <span class="zh">在 LinkedIn 上聊聊</span>
+    <span class="cta-sub">lunayzhao</span>
+  </a>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════ Footer ═══════════════════ -->
+<footer>
+  <div class="footer-logo">
+    <img src="assets/logo-footer.png" alt="DesigNA" width="130" height="44" style="vertical-align:middle;">
+  </div>
+  <p>&copy; 2026 DesigNA · <span class="en">Design Injected Into DNA</span><span class="zh">设计注入基因</span></p>
+  <p style="font-size:11px;opacity:0.4;margin-top:8px;letter-spacing:1px;">CARBON · SILICON · ETERNAL</p>
+</footer>
+
+<!-- ═══════════════════ Scripts ═══════════════════ -->
+<script>
+/* ─── Theme Toggle ─── */
+const html = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+
+function applyTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('designa-theme', theme);
+}
+
+themeBtn.addEventListener('click', () => {
+  applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+// Load saved theme
+const savedTheme = localStorage.getItem('designa-theme');
+if (savedTheme) applyTheme(savedTheme);
+
+/* ─── Language Toggle ─── */
+const langBtn = document.getElementById('langToggle');
+const langStates = ['both', 'en', 'zh'];
+let langIdx = 0;
+
+function applyLang(lang) {
+  html.setAttribute('data-lang', lang);
+  if (lang === 'both') { langBtn.textContent = 'BOTH'; langIdx = 0; }
+  else if (lang === 'en') { langBtn.textContent = 'EN'; langIdx = 1; }
+  else { langBtn.textContent = '中'; langIdx = 2; }
+  localStorage.setItem('designa-lang', lang);
+}
+
+langBtn.addEventListener('click', () => {
+  langIdx = (langIdx + 1) % langStates.length;
+  applyLang(langStates[langIdx]);
+});
+
+// Load saved lang
+const savedLang = localStorage.getItem('designa-lang');
+if (savedLang) applyLang(savedLang);
+
+/* ─── Navbar Scroll ─── */
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+/* ─── Scroll Reveal ─── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ─── Smooth Scroll ─── */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ─── Particle Canvas (Molecular Network) ─── */
+const particleCanvas = document.getElementById('particle-canvas');
+const pctx = particleCanvas.getContext('2d');
+let particles = [];
+let mouse = { x: 0, y: 0 };
+const brandColors = ['#FF6F61', '#00AEEF', '#440099'];
+
+function resizeParticles() {
+  particleCanvas.width = window.innerWidth;
+  particleCanvas.height = window.innerHeight;
+}
+resizeParticles();
+window.addEventListener('resize', resizeParticles);
+
+document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+class Particle {
+  constructor() {
+    this.reset(true);
+  }
+  reset(init) {
+    this.x = init ? Math.random() * particleCanvas.width : (Math.random() < 0.5 ? -50 : particleCanvas.width + 50);
+    this.y = init ? Math.random() * particleCanvas.height : (Math.random() < 0.5 ? -50 : particleCanvas.height + 50);
+    this.vx = (Math.random() - 0.5) * 0.35;
+    this.vy = (Math.random() - 0.5) * 0.35;
+    this.size = Math.random() * 2.5 + 1;
+    this.color = brandColors[Math.floor(Math.random() * brandColors.length)];
+    this.opacity = Math.random() * 0.5 + 0.1;
+    this.life = 0;
+    this.maxLife = Math.random() * 400 + 200;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life++;
+    if (this.life > this.maxLife) this.reset(false);
+    if (this.x < -60 || this.x > canvas.width + 60) this.vx *= -1;
+    if (this.y < -60 || this.y > canvas.height + 60) this.vy *= -1;
+
+    // Slight attraction to mouse
+    const dx = mouse.x - this.x;
+    const dy = mouse.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 200) {
+      this.vx += dx * 0.0002;
+      this.vy += dy * 0.0002;
+    }
+  }
+  draw() {
+    pctx.beginPath();
+    pctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    pctx.fillStyle = this.color;
+    pctx.globalAlpha = this.opacity;
+    pctx.fill();
+  }
+  drawLine(p2) {
+    const dx = this.x - p2.x;
+    const dy = this.y - p2.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 130) {
+      pctx.beginPath();
+      pctx.moveTo(this.x, this.y);
+      pctx.lineTo(p2.x, p2.y);
+      pctx.strokeStyle = '#440099';
+      pctx.globalAlpha = (1 - dist / 130) * 0.06;
+      pctx.lineWidth = 0.6;
+      pctx.stroke();
+    }
+  }
+}
+
+for (let i = 0; i < 70; i++) particles.push(new Particle());
+
+function animateParticles() {
+  pctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  for (let i = 0; i < particles.length; i++)
+    for (let j = i + 1; j < particles.length; j++)
+      particles[i].drawLine(particles[j]);
+  pctx.globalAlpha = 1;
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+</script>
+
+</body>
+</html>
