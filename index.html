@@ -419,6 +419,9 @@ section { padding: 120px 48px; max-width: 1280px; margin: 0 auto; position: rela
 .logo-var:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--coral); }
 .logo-var.dark:hover { border-color: rgba(255,255,255,0.15); }
 .logo-var.dark { background: #0A0A12; border-color: rgba(255,255,255,0.05); }
+.logo-var-mono { position: relative; }
+[data-theme="dark"] .logo-var-mono { background: #F8F6F3; border-color: rgba(0,0,0,0.08); }
+[data-theme="dark"] .logo-var-mono .var-label { color: #8A8898; }
 .logo-var .var-label {
   font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px;
   color: var(--text-muted);
@@ -714,7 +717,7 @@ footer .footer-logo svg { width: 20px; height: 20px; }
       </div>
 
       <!-- Solid Black -->
-      <div class="logo-var reveal">
+      <div class="logo-var logo-var-mono reveal">
         <span class="var-label"><span class="en">Monochrome</span><span class="zh">单色</span></span>
         <img src="assets/logo-black.png" alt="DesigNA Black" width="340" height="116" style="width:100%;height:auto;">
         <span class="var-label" style="font-size:10px;letter-spacing:1px;">B&W · 黑白</span>
