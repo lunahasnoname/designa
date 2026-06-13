@@ -15,3 +15,8 @@ node_modules/
 # Python
 __pycache__/
 *.pyc
+*.py
+
+# Video generation artifacts
+output/
+play-*-video-plan.json
