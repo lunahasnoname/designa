@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-lang="both" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +43,7 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-[data-theme="dark"] {
+htmlhtml[data-theme="dark"] {
   --bg: #0E0E12;
   --bg-surface: #16161E;
   --bg-warm: #1A1A24;
@@ -78,8 +78,8 @@ nav {
   transition: padding 0.4s var(--ease-out), border-color 0.4s, background 0.4s;
 }
 nav.scrolled { padding: 16px 56px; border-bottom-color: var(--border); }
-[data-theme="dark"] nav { background: rgba(14,14,18,0.9); }
-[data-theme="dark"] nav.scrolled { border-bottom-color: var(--border); }
+html[data-theme="dark"] nav { background: rgba(14,14,18,0.9); }
+html[data-theme="dark"] nav.scrolled { border-bottom-color: var(--border); }
 
 .nav-logo { display: flex; align-items: center; text-decoration: none; opacity: 0.85; transition: opacity 0.3s; }
 .nav-logo:hover { opacity: 1; }
@@ -250,8 +250,8 @@ section { padding: 160px 56px; max-width: 1200px; margin: 0 auto; }
 .logo-var.dark:hover { border-color: rgba(255,255,255,0.12); }
 .logo-var .var-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-muted); font-weight: 500; }
 .logo-var.dark .var-label { color: rgba(255,255,255,0.35); }
-[data-theme="dark"] .logo-var-mono { background: #F8F6F3; border-color: rgba(0,0,0,0.08); }
-[data-theme="dark"] .logo-var-mono .var-label { color: #8A8898; }
+html[data-theme="dark"] .logo-var-mono { background: #F8F6F3; border-color: rgba(0,0,0,0.08); }
+html[data-theme="dark"] .logo-var-mono .var-label { color: #8A8898; }
 .logo-var img { width: 100%; height: auto; }
 
 .typo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -329,10 +329,22 @@ footer {
   .system-section { padding: 100px 0; }
   .system-section .section-header,
   .system-section .system-content { padding-left: 28px; padding-right: 28px; }
-  nav { padding: 16px 28px; }
-  nav.scrolled { padding: 12px 28px; }
-  .nav-links { gap: 20px; }
-  .nav-links a { font-size: 10px; letter-spacing: 0.5px; }
+  nav {
+    padding: 12px 20px;
+    flex-wrap: wrap;
+    row-gap: 10px;
+    align-items: center;
+  }
+  nav.scrolled { padding: 8px 20px; }
+  .nav-logo { order: 1; }
+  .nav-actions { order: 3; }
+  .nav-links {
+    order: 2;
+    flex-basis: 100%;
+    justify-content: center;
+    gap: 16px;
+  }
+  .nav-links a { font-size: 10px; letter-spacing: 0.5px; white-space: nowrap; }
   .color-grid { grid-template-columns: 1fr; }
   .typo-grid { grid-template-columns: 1fr; }
   .contact-section { padding: 120px 28px; }
@@ -350,7 +362,7 @@ footer {
 }
 </style>
 </head>
-<body data-lang="both" data-theme="dark">
+<body data-lang="both">
 
 <!-- ═══════════════════ Navigation ═══════════════════ -->
 <nav id="navbar">
