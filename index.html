@@ -169,8 +169,55 @@ html[data-theme="dark"] nav.scrolled { border-bottom-color: var(--border); }
 }
 .btn-primary { background: var(--text); color: var(--bg); }
 .btn-primary:hover { background: var(--coral); transform: translateY(-2px); }
-.btn-secondary { background: transparent; color: var(--text-secondary); border: 1.5px solid var(--border-strong); }
-.btn-secondary:hover { color: var(--text); border-color: var(--text-muted); }
+
+.btn-secondary {
+  position: relative; z-index: 1;
+  background: transparent; color: transparent;
+  border: none; font-weight: 600;
+}
+.btn-secondary span {
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.btn-secondary::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: 4px;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--cyan), var(--violet), var(--cyan), var(--violet));
+  background-size: 300% 300%;
+  animation: borderShine 4s ease-in-out infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.btn-secondary::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: 4px;
+  background: linear-gradient(135deg, var(--cyan), var(--violet), var(--cyan));
+  background-size: 300% 300%;
+  animation: borderShine 4s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: -1;
+}
+.btn-secondary:hover { transform: translateY(-2px); }
+.btn-secondary:hover::after { opacity: 0.1; }
+.btn-secondary:hover::before { animation-duration: 1.5s; }
+.btn-secondary:hover span {
+  background: linear-gradient(135deg, var(--cyan) 0%, #fff 50%, var(--violet) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes borderShine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
 
 /* ─── Section Basics ─── */
 section { padding: 160px 56px; max-width: 1200px; margin: 0 auto; }
